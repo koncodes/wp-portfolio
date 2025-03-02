@@ -22,5 +22,8 @@
 
 # … except our stuff.
 !/wordpress/wp-content/plugins/mailhog.php
-!/wordpress/wp-content/themes/zakra
+!/wordpress/wp-content/plugins/mailhog.php
+
+!/wordpress/wp-content/plugins/portfolio-projects
+!/wordpress/wp-content/themes/understrap
 
