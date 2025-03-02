@@ -19,7 +19,7 @@ require_once "classes/ProjectPostType.php";
 require_once "classes/ProjectLanguage.php";
 require_once "classes/ProjectMeta.php";
 require_once "classes/RecentProjectsShortcode.php";
-//require_once "classes/ProjectSettings.php";
+require_once "classes/ProjectSettings.php";
 
 
 Plugin::getInstance();

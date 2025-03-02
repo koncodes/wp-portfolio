@@ -19,7 +19,7 @@ class Plugin extends Singleton
         ProjectLanguage::getInstance();
         ProjectMeta::getInstance();
         RecentProjectsShortcode::getInstance();
-//        ProjectSettings::getInstance();
+        ProjectSettings::getInstance();
 
 	    add_action('wp_enqueue_scripts', [$this, 'enqueueStyles']);
 

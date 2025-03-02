@@ -60,7 +60,6 @@ class ProjectSettings extends Singleton
             'manage_options',
             'project-settings',
             [$this, 'settingsPage'],
-//            position: 99
 
         );
 
@@ -83,77 +82,77 @@ class ProjectSettings extends Singleton
         <?php
     }
 
-    public function addFields(){
+    public function addFields() {
         add_settings_section(
-                'project-general',
+            'project-general',
             'General Project Settings',
             function() {},
-            self::SETTINGS_GROUP // or 'general', 'writing', etc
+            self::SETTINGS_GROUP
         );
-        ?>
-        <style>
-            .form-table tr {border-top: 1px solid #ccc}
-            .form-table tr:last-of-type {border-bottom: 1px solid #ccc}
-            .form-table th {border-right: 1px solid #ccc}
-        </style>
-        <?php
 
-	    add_settings_field(
-		    self::PROJECT_TERM_SINGULAR,
-		    'Change Project Term Singular',
-		    function() {
-			    $projectTermSingular = esc_attr( get_option( self::PROJECT_TERM_SINGULAR) ); // Get the saved value from the database
-			    ?>
+
+        add_settings_field(
+            self::PROJECT_TERM_SINGULAR,
+            'Change Project Term Singular',
+            function() {
+                $projectTermSingular = esc_attr(get_option(self::PROJECT_TERM_SINGULAR));
+                ?>
                 <label for="<?= self::PROJECT_TERM_SINGULAR ?>">
                     <input type="text" id="<?= self::PROJECT_TERM_SINGULAR ?>"
                            name="<?= self::PROJECT_TERM_SINGULAR ?>" value="<?= $projectTermSingular ?>">
-                </label>
-                <?php
-		    },
-		    self::SETTINGS_GROUP,
-		    'project-general'
-	    );
-	    add_settings_field(
-		    self::PROJECT_TERM_PLURAL,
-		    'Change Project Term Plural',
-		    function() {
-			    $projectTermPlural = esc_attr( get_option( self::PROJECT_TERM_PLURAL ) ); // Get the saved value from the database
-			    ?>
-                <label for="<?= self::PROJECT_TERM_PLURAL ?>">
-                    <input type="text" id="<?= self::PROJECT_TERM_PLURAL ?>"
-                               name="<?= self::PROJECT_TERM_PLURAL ?>" value="<?= $projectTermPlural ?>">
-                </label>
-                <?php
-		    },
-		    self::SETTINGS_GROUP,
-		    'project-general'
-	    );
-        add_settings_field(
-            self::SHOW_TECHNOLOGIES,
-            'Show Technologies',
-            function() {
-                $checked = get_option( self::SHOW_TECHNOLOGIES) ? 'checked' : '';
-                ?>
-                <label for="<?= self::SHOW_TECHNOLOGIES ?>">
-                    <input type="checkbox" id="<?= self::SHOW_TECHNOLOGIES ?>"
-                           name="<?= self::SHOW_TECHNOLOGIES ?>"
-                        <?= $checked ?> value="1">
                 </label>
                 <?php
             },
             self::SETTINGS_GROUP,
             'project-general'
         );
+
+        add_settings_field(
+            self::PROJECT_TERM_PLURAL,
+            'Change Project Term Plural',
+            function() {
+                $projectTermPlural = esc_attr(get_option(self::PROJECT_TERM_PLURAL));
+                ?>
+                <style>
+                    .form-table tr { border-top: 1px solid #ccc; }
+                    .form-table tr:last-of-type { border-bottom: 1px solid #ccc; }
+                    .form-table th { border-right: 1px solid #ccc; }
+                </style>
+                <label for="<?= self::PROJECT_TERM_PLURAL ?>">
+                    <input type="text" id="<?= self::PROJECT_TERM_PLURAL ?>"
+                           name="<?= self::PROJECT_TERM_PLURAL ?>" value="<?= $projectTermPlural ?>">
+                </label>
+                <?php
+            },
+            self::SETTINGS_GROUP,
+            'project-general'
+        );
+
+        add_settings_field(
+            self::SHOW_TECHNOLOGIES,
+            'Show Technologies',
+            function() {
+                $checked = get_option(self::SHOW_TECHNOLOGIES) ? 'checked' : '';
+                ?>
+                <label for="<?= self::SHOW_TECHNOLOGIES ?>">
+                    <input type="checkbox" id="<?= self::SHOW_TECHNOLOGIES ?>"
+                           name="<?= self::SHOW_TECHNOLOGIES ?>" <?= $checked ?> value="1">
+                </label>
+                <?php
+            },
+            self::SETTINGS_GROUP,
+            'project-general'
+        );
+
         add_settings_field(
             self::SHOW_LINKS,
             'Show Links',
             function() {
-                $checked = get_option( self::SHOW_LINKS) ? 'checked' : '';
+                $checked = get_option(self::SHOW_LINKS) ? 'checked' : '';
                 ?>
                 <label for="<?= self::SHOW_LINKS ?>">
                     <input type="checkbox" id="<?= self::SHOW_LINKS ?>"
-                           name="<?= self::SHOW_LINKS ?>"
-                        <?= $checked ?> value="1">
+                           name="<?= self::SHOW_LINKS ?>" <?= $checked ?> value="1">
                 </label>
                 <?php
             },
