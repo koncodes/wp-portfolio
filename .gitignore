@@ -1,0 +1,26 @@
+/db/data
+.env
+.idea
+
+# Exclude everything in WP root…
+/wordpress/*
+
+# … except wp-content.
+!/wordpress/wp-content
+
+# Now exclude everything in wp-content …
+/wordpress/wp-content/*
+
+# … except plugins, themes, and uploads …
+!/wordpress/wp-content/plugins
+!/wordpress/wp-content/themes
+!/wordpress/wp-content/uploads
+
+# Now exclude everything in plugins and themes …
+/wordpress/wp-content/plugins/*
+/wordpress/wp-content/themes/*
+
+# … except our stuff.
+!/wordpress/wp-content/plugins/mailhog.php
+!/wordpress/wp-content/themes/zakra
+

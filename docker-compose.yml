@@ -1,0 +1,73 @@
+# named volumes... make a UNIQUE one for each installation
+# and update mariadb volume:
+volumes:
+  db-wp-starter:
+
+services:
+  db:
+    image: mariadb:${MARIADB_VERSION}
+    environment:
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      # or
+      # MARIADB_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      # named volumes:
+      - db-wp-starter:/var/lib/mysql
+      # local volumes
+      #- ./db/data:/var/lib/mysql
+      - ./conf/mysql:/etc/mysql/conf.d
+      - ./db/init:/docker-entrypoint-initdb.d
+
+  wordpress:
+    image: wordpress:${WORDPRESS_VERSION}-php${PHP_VERSION}-apache
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DEBUG: ${WP_DEBUG}
+      WORDPRESS_TABLE_PREFIX: ${WP_TABLE_PREFIX}
+      WORDPRESS_CONFIG_EXTRA: define( 'WP_AUTO_UPDATE_CORE', false );
+    volumes:
+      - ./wordpress:/var/www/html
+#     You can also map just individual directories,
+#     but your IDE context awareness may be lacking
+#      - ./plugins:/var/www/html/wp-content/plugins
+#      - ./themes:/var/www/html/wp-content/themes
+      - ./conf/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+
+  pma:
+    image: phpmyadmin:latest
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=${DB_USER}
+      - PMA_PASSWORD=${DB_PASSWORD}
+
+  mailhog:
+    image: jcalonso/mailhog:latest
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+  wpcli:
+    depends_on:
+      - wordpress
+    image: wordpress:cli-2-php${PHP_VERSION}
+    user: 33:33 # use same user-id as WordPress container
+    command: tail -f /dev/null # keep container running
+    volumes:
+      - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_TABLE_PREFIX: ${WP_TABLE_PREFIX}
+
