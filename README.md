@@ -48,11 +48,11 @@ docker compose up -d
 ## WP CLI
 You can run a single command:
 ```shell
-docker exec -it docker-dock-it-wpcli-1 wp user list
+docker exec -it wp-portfolio-wpcli-1 wp user list
 ```
 or login via the terminal:
 ```shell
-docker exec -it docker-dock-it-wpcli-1 bash
+docker exec -it wp-portfolio-wpcli-1 bash
 ```
 or open the WPCLI terminal in Docker Desktop
 
