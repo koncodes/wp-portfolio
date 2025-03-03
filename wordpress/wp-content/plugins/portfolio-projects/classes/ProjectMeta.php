@@ -56,21 +56,35 @@ class ProjectMeta extends Singleton
         global $post;
         $gallery = get_post_meta($post->ID, self::GALLERY, true);
         ?>
-        <div id="project_gallery_container">
-            <ul class="project-gallery-list">
-                <?php
-                if (!empty($gallery)) {
-                    foreach ($gallery as $image_id) {
-                        echo '<li style="display:inline-block;margin:5px;">';
-                        echo wp_get_attachment_image($image_id, 'thumbnail');
-                        echo '<input type="hidden" name="'.self::GALLERY.'[]" value="'.$image_id.'">';
-                        echo '<button type="button" class="remove-image">Remove</button>';
-                        echo '</li>';
-                    }
-                }
-                ?>
-            </ul>
-            <input type="button" class="button project-gallery-upload" value="<?php _e('Add Images', TEXT_DOMAIN); ?>">
+        <div id="project_gallery_container" class="project-meta-box">
+            <div>
+                <span class="project-meta-box-label">
+                    <input type="button" class="button project-gallery-upload" value="<?php _e('Add Images', TEXT_DOMAIN); ?>">
+                </span>
+                <span>
+                    <ul class="project-gallery-list">
+                        <?php
+                        if (!empty($gallery)) {
+                            foreach ($gallery as $image_id) {
+                                echo '<li class="project-gallery-item">';
+                                echo wp_get_attachment_image($image_id, 'thumbnail');
+                                echo '<input type="hidden" name="'.self::GALLERY.'[]" value="'.$image_id.'">';
+                                echo '<button type="button" class="remove-image"><span class="dashicons dashicons-trash"></button>';
+                                echo '</li>';
+                            }
+                        } else {
+                            echo '<li class="project-gallery-item project-gallery-placeholder">
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 120 120" fill="none">
+                                           <rect width="120" height="120" fill="#EFF1F3"/>
+                                           <path fill-rule="evenodd" clip-rule="evenodd" d="M33.2503 38.4816C33.2603 37.0472 34.4199 35.8864 35.8543 35.875H83.1463C84.5848 35.875 85.7503 37.0431 85.7503 38.4816V80.5184C85.7403 81.9528 84.5807 83.1136 83.1463 83.125H35.8543C34.4158 83.1236 33.2503 81.957 33.2503 80.5184V38.4816ZM80.5006 41.1251H38.5006V77.8751L62.8921 53.4783C63.9172 52.4536 65.5788 52.4536 66.6039 53.4783L80.5006 67.4013V41.1251ZM43.75 51.6249C43.75 54.5244 46.1005 56.8749 49 56.8749C51.8995 56.8749 54.25 54.5244 54.25 51.6249C54.25 48.7254 51.8995 46.3749 49 46.3749C46.1005 46.3749 43.75 48.7254 43.75 51.6249Z" fill="#687787"/>
+                                       </svg>
+                                  </li>';
+                        }
+                        ?>
+
+                    </ul>
+                </span>
+            </div>
         </div>
 
         <script>
@@ -90,11 +104,11 @@ class ProjectMeta extends Singleton
                     file_frame.on('select', function() {
                         var attachments = file_frame.state().get('selection').map(function(attachment) {
                             attachment = attachment.toJSON();
-                            $('.project-gallery-list').append(
-                                '<li style="display:inline-block;margin:5px;">' +
+                            $('.project-gallery-list').prepend(
+                                '<li class="project-gallery-item">' +
                                 '<img src="' + attachment.sizes.thumbnail.url + '" width="100">' +
                                 '<input type="hidden" name="<?= self::GALLERY ?>[]" value="' + attachment.id + '">' +
-                                '<button type="button" class="remove-image">Remove</button>' +
+                                '<button type="button" class="remove-image"><span class="dashicons dashicons-trash"></button>' +
                                 '</li>'
                             );
                         });
@@ -130,7 +144,7 @@ class ProjectMeta extends Singleton
 
         ?>
         <style>
-            :is(#project_publishing_information, #project_information) .inside {
+            :is(#project_gallery, #project_information) .inside {
                 padding: 0;
                 margin: 0;
             }
@@ -144,17 +158,16 @@ class ProjectMeta extends Singleton
                 justify-content: space-between;
                 border-bottom: 1px solid #dfdfdf;
             }
-            .project-meta-box:last-of-type > label:last-of-type, .project-meta-box:last-of-type > div:last-of-type {
-                border-bottom: 0;
-            }
+
             .project-meta-box .project-meta-box-label {
                 background: #F9F9F9;
                 padding: 20px 10px 20px 20px;
-                flex: .35;
+                flex: 0 0 20%;
+                min-width: 150px;
                 font-weight: 700;
                 border-right: 1px solid #dfdfdf;
             }
-            .project-meta-box span {
+            .project-meta-box > * > span {
                 flex: 1;
                 padding: 15px;
             }
@@ -192,11 +205,56 @@ class ProjectMeta extends Singleton
             .project-technologies-category {
                 display: flex;
                 align-items: flex-start;
-                border-bottom: 1px solid #ccc;;
+                border-bottom: 1px solid #ccc;
                 padding: 15px;
             }
             .project-technologies-head {
                 flex: 0 0 110px;
+            }
+
+            .project-meta-box:last-of-type > label:last-of-type,
+            .project-meta-box:last-of-type > div:last-of-type,
+            .project-technologies-category:last-of-type {
+                border-bottom: 0;
+            }
+
+
+            #project_gallery_container {
+                border-top: 1px solid #dfdfdf;
+            }
+            .project-gallery-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin: 0;
+            }
+
+            .project-gallery-item {
+                display: flex;
+                flex-direction: column;
+                flex: 0 0 120px;
+                height: 120px;
+                overflow: hidden;
+                position: relative;
+                margin: 0;
+            }
+            .project-gallery-item + .project-gallery-placeholder {
+                display: none;
+            }
+            .project-gallery-item :is(img, svg) {
+                width: 120px;
+                height: 120px;
+                object-fit: cover;
+            }
+            .project-gallery-item button {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding: 7px;
+                border: 0;
+                border-radius: 0 0 0 5px;
+                color: white;
+                background: #bb3333;
             }
         </style>
         <div class="project-meta-box">
@@ -297,28 +355,33 @@ class ProjectMeta extends Singleton
 
     /**
      * gets live link
-     * @return array project price
+     * @return string project price
      */
     function getGalleryImages() {
         $post = get_post();
         $gallery = get_post_meta($post->ID, self::GALLERY, true);
+
         if (!empty($gallery)) {
-            echo '<div class="project-gallery">';
+            $output = '<div class="project-gallery">';
             foreach ($gallery as $image_id) {
-                echo wp_get_attachment_image($image_id, 'medium');
+                $output .= wp_get_attachment_image($image_id, 'medium');
             }
-            echo '</div>';
+            $output .= '</div>';
+            return $output;
         }
+
+        return '';
     }
+
 
     /**
      * set default settings
      * @return void
      */
     public function setDefaults() {
-//	    add_option( ProjectSettings::SHOW_LINKS, 1);
-//	    add_option( ProjectSettings::SHOW_TECHNOLOGIES, 1);
-//	    add_option( ProjectSettings::PROJECT_TERM_SINGULAR, 'Project');
-//	    add_option( ProjectSettings::PROJECT_TERM_PLURAL, 'Projects');
+	    add_option( ProjectSettings::SHOW_LINKS, 1);
+	    add_option( ProjectSettings::SHOW_TECHNOLOGIES, 1);
+	    add_option( ProjectSettings::PROJECT_TERM_SINGULAR, 'Project');
+	    add_option( ProjectSettings::PROJECT_TERM_PLURAL, 'Projects');
     }
 }

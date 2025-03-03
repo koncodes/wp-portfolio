@@ -31,11 +31,9 @@ class ProjectPostType extends Singleton
      */
     public function registerPostType() {
 
-//	    $singular = ProjectSettings::getInstance()->projectTermSingular();
-//	    $plural = ProjectSettings::getInstance()->projectTermPlural();
+	    $singular = ProjectSettings::getInstance()->projectTermSingular();
+	    $plural = ProjectSettings::getInstance()->projectTermPlural();
 
-        $singular = 'Project';
-        $plural = 'Projects';
 
         $labels = array(
             'name'                  => _x( $plural, 'Post Type General Name', TEXT_DOMAIN ),
@@ -122,6 +120,8 @@ class ProjectPostType extends Singleton
             $gitLink = $meta->getGitLink();
             $liveLink = $meta->getLiveLink();
 
+            $galleryImages = $meta->getGalleryImages();
+
             // add project metadata to variable
             $projectMetaContent = '<div class="project-meta">
                 <h3>' . __('Links', TEXT_DOMAIN) . '</h3>' .
@@ -169,7 +169,7 @@ class ProjectPostType extends Singleton
 		        $projectMetaLanguages .= '</div>';
 	        }
 
-	        $content = $content . $projectMetaLanguages . $projectMetaContent;
+	        $content = $galleryImages . $content . $projectMetaLanguages . $projectMetaContent;
 
             wp_reset_postdata();
         }
