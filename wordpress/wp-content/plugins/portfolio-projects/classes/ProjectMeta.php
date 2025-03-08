@@ -52,6 +52,193 @@ class ProjectMeta extends Singleton
         );
     }
 
+
+
+
+    /**
+     * displays the form fields in the custom meta box
+     * @return void
+     */
+    function detailsForm() {
+
+        $technologies = $this->getTechnologies();
+        $technologiesList = [
+            'Frameworks' => [
+                'Vue.js', 'Next.js', 'Angular', 'Express.js', 'Quasar'
+            ],
+            'Libraries' => [
+                'jQuery', 'React.js', 'Bootstrap', 'Tailwind CSS', 'Pinia', 'Axios'
+            ],
+            'Languages' => [
+                'JavaScript', 'TypeScript', 'PHP', 'Python', 'Lua', 'HTML5', 'CSS', 'SCSS', 'SQL'
+            ],
+            'Tools' => [
+                'Git', 'GitHub', 'Visual Studio Code', 'PhpStorm', 'phpMyAdmin', 'Docker',
+                'WP-CLI', 'Node.js', 'Webpack', 'Gulp', 'Prettier', 'Vite', 'NPM', 'Yarn', 'Nginx', 'Google Cloud Console', 'gcloud', 'SSH', 'FTP/SFTP', 'Certbot', 'PHP-FPM'
+            ],
+            'APIs' => [
+                'The Movie Database API', 'Google Maps API', 'Stripe API', 'OpenWeather API', 'GraphQL', 'REST API', 'Firebase Authentication'
+            ],
+            'Databases' => [
+                'MySQL', 'MongoDB', 'Firebase', 'Cloud Firestore', 'SQLite', 'MariaDB'
+            ],
+            'Design Tools' => [
+                'Figma', 'Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'Canva'
+            ],
+        ];
+
+        $gitLink = $this->getGitLink();
+        $liveLink = $this->getLiveLink();
+
+        ?>
+        <style>
+            :is(#project_gallery, #project_information) .inside {
+                padding: 0;
+                margin: 0;
+            }
+            .edit-post-meta-boxes-area .postbox-header {
+                border-bottom: 1px solid #dfdfdf;
+            }
+            .project-meta-box h4 {
+                margin: 0;
+                padding: 20px;
+                border-bottom: 1px solid #dfdfdf;
+            }
+            .project-meta-box > :is(label, div) {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px solid #dfdfdf;
+            }
+
+            .project-meta-box .project-meta-box-label {
+                background: #F9F9F9;
+                padding: 20px 10px 20px 20px;
+                flex: 0 0 20%;
+                min-width: 150px;
+                font-weight: 700;
+                border-right: 1px solid #dfdfdf;
+            }
+            .project-meta-box > * > span {
+                flex: 1;
+                padding: 15px;
+            }
+            .project-meta-box label :is(input:not[type=checkbox], select) {
+                flex: 2;
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                width: 100%;
+            }
+            .project-technologies {
+                display: inline-block;
+                margin: 0 5px 7px 0;
+            }
+            .project-technologies label {
+                display: flex;
+                align-items: flex-end;
+                padding: 10px 13px;
+                gap: 5px;
+                border: 1px solid #ccc;
+                border-radius: 100px;
+                width: fit-content;
+
+
+            }
+            .project-technologies:last-of-type {
+                margin: 0 ;
+            }
+            .components-panel__body.is-opened {
+                height: fit-content;
+            }
+            .project-meta-box .project-technologies-con {
+                padding: 0;
+            }
+            .project-technologies-category {
+                display: flex;
+                align-items: flex-start;
+                border-bottom: 1px solid #ccc;
+                padding: 15px;
+            }
+            .project-technologies-head {
+                flex: 0 0 110px;
+            }
+
+            .project-meta-box:last-of-type > label:last-of-type,
+            .project-meta-box:last-of-type > div:last-of-type,
+            .project-technologies-category:last-of-type {
+                border-bottom: 0;
+            }
+
+
+            .project-gallery-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin: 0;
+            }
+
+            .project-gallery-item {
+                display: flex;
+                flex-direction: column;
+                flex: 0 0 120px;
+                height: 120px;
+                overflow: hidden;
+                position: relative;
+                margin: 0;
+            }
+            .project-gallery-item + .project-gallery-placeholder {
+                display: none;
+            }
+            .project-gallery-item :is(img, svg) {
+                width: 120px;
+                height: 120px;
+                object-fit: cover;
+            }
+            .project-gallery-item button {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding: 7px;
+                border: 0;
+                border-radius: 0 0 0 5px;
+                color: white;
+                background: #bb3333;
+            }
+        </style>
+        <div class="project-meta-box">
+            <label><span class="project-meta-box-label"><?= __('GitHub Link', TEXT_DOMAIN) ?></span> <span><input type="text" name="<?= self::GIT_LINK ?>" value="<?= $gitLink ?>"></span></label>
+            <label><span class="project-meta-box-label"><?= __('Live Link', TEXT_DOMAIN) ?></span> <span><input type="text" name="<?= self::LIVE_LINK ?>" value="<?= $liveLink ?>"></span></label>
+        </div>
+        <div class="project-meta-box">
+            <h4><?= __('Select One Or More Technologies', TEXT_DOMAIN) ?></h4>
+            <div>
+                <span class="project-meta-box-label"><?= __('Technologies', TEXT_DOMAIN) ?></span>
+                <span class="project-technologies-con">
+                <?php foreach ($technologiesList as $category => $items) : ?>
+                    <div class="project-technologies-category">
+                        <div class="project-technologies-head"><?= esc_html($category) ?></div>
+                        <div class="project-technologies-body">
+                            <?php foreach ($items as $tech) : ?>
+                                <div class="project-technologies">
+                                    <label for="tech-<?= esc_attr(sanitize_title($tech)) ?>">
+                                        <input type="checkbox"
+                                               name="<?= self::TECHNOLOGIES ?>[]"
+                                               id="tech-<?= esc_attr(sanitize_title($tech)) ?>"
+                                               value="<?= esc_attr($tech) ?>"
+                                           <?= checked(in_array($tech, $technologies), true, false) ?>>
+                                        <?= esc_html($tech) ?>
+                                    </label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </span>
+            </div>
+        </div>
+        <?php
+    }
+
     function galleryForm() {
         global $post;
         $gallery = get_post_meta($post->ID, self::GALLERY, true);
@@ -121,174 +308,6 @@ class ProjectMeta extends Singleton
                 });
             });
         </script>
-        <?php
-    }
-
-
-    /**
-     * displays the form fields in the custom meta box
-     * @return void
-     */
-    function detailsForm() {
-
-        $technologies = $this->getTechnologies();
-        $technologiesList = [
-            'Frameworks' => ['Vue.js', 'React.js', 'Angular', 'jQuery', 'Bootstrap', 'Next.js', 'Tailwind CSS', 'Pinia'],
-            'Languages' => ['JavaScript', 'PHP', 'TypeScript', 'Python', 'Lua', 'HTML5', 'CSS', 'SCSS', 'SQL'],
-            'Tools' => ['Git', 'GitHub', 'Visual Studio Code', 'PhpStorm', 'phpMyAdmin', 'Docker', 'WP-CLI', 'Webpack', 'Prettier', 'Gulp', 'Node.js'],
-            'APIs' => ['The Movie Database API', 'Firebase'],
-            'Design Tools' => ['Figma', 'Adobe Photoshop', 'Adobe Illustrator'],
-        ];
-        $gitLink = $this->getGitLink();
-        $liveLink = $this->getLiveLink();
-
-        ?>
-        <style>
-            :is(#project_gallery, #project_information) .inside {
-                padding: 0;
-                margin: 0;
-            }
-            .project-meta-box h4 {
-                margin: 0;
-                padding: 20px;
-                border-bottom: 1px solid #dfdfdf;
-            }
-            .project-meta-box > :is(label, div) {
-                display: flex;
-                justify-content: space-between;
-                border-bottom: 1px solid #dfdfdf;
-            }
-
-            .project-meta-box .project-meta-box-label {
-                background: #F9F9F9;
-                padding: 20px 10px 20px 20px;
-                flex: 0 0 20%;
-                min-width: 150px;
-                font-weight: 700;
-                border-right: 1px solid #dfdfdf;
-            }
-            .project-meta-box > * > span {
-                flex: 1;
-                padding: 15px;
-            }
-            .project-meta-box label :is(input:not[type=checkbox], select) {
-                flex: 2;
-                padding: 5px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                width: 100%;
-            }
-            .project-technologies {
-                display: inline-block;
-                margin: 0 5px 5px 0;
-            }
-            .project-technologies label {
-                display: flex;
-                align-items: flex-end;
-                padding: 10px 13px;
-                gap: 5px;
-                border: 1px solid #ccc;
-                border-radius: 100px;
-                width: fit-content;
-
-
-            }
-            .project-technologies:last-of-type {
-                margin: 0 ;
-            }
-            .components-panel__body.is-opened {
-                height: fit-content;
-            }
-            .project-meta-box .project-technologies-con {
-                padding: 0;
-            }
-            .project-technologies-category {
-                display: flex;
-                align-items: flex-start;
-                border-bottom: 1px solid #ccc;
-                padding: 15px;
-            }
-            .project-technologies-head {
-                flex: 0 0 110px;
-            }
-
-            .project-meta-box:last-of-type > label:last-of-type,
-            .project-meta-box:last-of-type > div:last-of-type,
-            .project-technologies-category:last-of-type {
-                border-bottom: 0;
-            }
-
-
-            #project_gallery_container {
-                border-top: 1px solid #dfdfdf;
-            }
-            .project-gallery-list {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-                margin: 0;
-            }
-
-            .project-gallery-item {
-                display: flex;
-                flex-direction: column;
-                flex: 0 0 120px;
-                height: 120px;
-                overflow: hidden;
-                position: relative;
-                margin: 0;
-            }
-            .project-gallery-item + .project-gallery-placeholder {
-                display: none;
-            }
-            .project-gallery-item :is(img, svg) {
-                width: 120px;
-                height: 120px;
-                object-fit: cover;
-            }
-            .project-gallery-item button {
-                position: absolute;
-                right: 0;
-                top: 0;
-                padding: 7px;
-                border: 0;
-                border-radius: 0 0 0 5px;
-                color: white;
-                background: #bb3333;
-            }
-        </style>
-        <div class="project-meta-box">
-            <h4><?= __('Add Project Links', TEXT_DOMAIN) ?></h4>
-            <label><span class="project-meta-box-label"><?= __('GitHub Link', TEXT_DOMAIN) ?></span> <span><input type="text" name="<?= self::GIT_LINK ?>" value="<?= $gitLink ?>"></span></label>
-            <label><span class="project-meta-box-label"><?= __('Live Link', TEXT_DOMAIN) ?></span> <span><input type="text" name="<?= self::LIVE_LINK ?>" value="<?= $liveLink ?>"></span></label>
-        </div>
-        <div class="project-meta-box">
-            <h4><?= __('Select One Or More Technologies', TEXT_DOMAIN) ?></h4>
-            <div>
-                <span class="project-meta-box-label"><?= __('Technologies', TEXT_DOMAIN) ?></span>
-                <span class="project-technologies-con">
-                <?php foreach ($technologiesList as $category => $items) : ?>
-                    <div class="project-technologies-category">
-                        <div class="project-technologies-head"><?= esc_html($category) ?></div>
-                        <div class="project-technologies-body">
-                            <?php foreach ($items as $tech) : ?>
-                                <div class="project-technologies">
-                                    <label for="tech-<?= esc_attr(sanitize_title($tech)) ?>">
-                                        <input type="checkbox"
-                                               name="<?= self::TECHNOLOGIES ?>[]"
-                                               id="tech-<?= esc_attr(sanitize_title($tech)) ?>"
-                                               value="<?= esc_attr($tech) ?>"
-                                           <?= checked(in_array($tech, $technologies), true, false) ?>>
-                                        <?= esc_html($tech) ?>
-                                    </label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </span>
-            </div>
-        </div>
         <?php
     }
 
