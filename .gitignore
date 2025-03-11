@@ -20,10 +20,13 @@
 /wordpress/wp-content/plugins/*
 /wordpress/wp-content/themes/*
 
+/wordpress/wp-content/themes/*/node_modules
+
 # … except our stuff.
 !/wordpress/wp-content/plugins/mailhog.php
-!/wordpress/wp-content/plugins/mailhog.php
-
 !/wordpress/wp-content/plugins/portfolio-projects
+!/wordpress/wp-content/plugins/portfolio-testimonials
 !/wordpress/wp-content/themes/understrap
+!/wordpress/wp-content/themes/underctrl
+
 

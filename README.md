@@ -1,17 +1,4 @@
-# WordPress Demo
-
-FROM wordpress:latest
-
-# Install dependencies
-```shell
-RUN apt-get update && apt-get install -y \
-curl \
-git \
-unzip \
-nodejs \
-npm \
-&& rm -rf /var/lib/apt/lists/*
-```
+# WordPress Docker Environmentß
 
 # Set working directory
 ```shell
